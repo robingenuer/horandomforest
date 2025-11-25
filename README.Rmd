@@ -32,10 +32,39 @@ pak::pak("robingenuer/horf")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
 ```{r example}
 library(horf)
-## basic example code
+## 
+```
+
+A basic example code already included in the help pages of the package (quite
+quick to run, but not so interesting because the different parameters are set
+to quite small values):
+
+```{r}
+rawForestBias <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+   xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
+   mc.cores = 2)
+rawForestConfint <- comput_confint(rawForestBias, nbBootstrap = 250)
+rawTreeBias <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+   xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, tree = TRUE,
+   var_estim = TRUE, mc.cores = 2)
+rawTreeConfint <- comput_confint(rawTreeBias, nbBootstrap = 250)
+plot_bias(rawForestBias, rawForestConfint, rawTreeBias, rawTreeConfint)
+```
+
+Another example (that takes several minutes to run on a 3 cores laptop) that
+allows to get a graph closer to the ones included in the paper would be:
+
+```{r, cache=TRUE}
+forestBias <- comput_bias(nbleaves = 2^(5:8), freg.name = "sum",
+   xdim = 2, nbobs = 1280, nbobs_test = 100, nfor = 25, 
+   var_estim = TRUE, mc.cores = 3)
+forestConfint <- comput_confint(forestBias, nbBootstrap = 500)
+treeBias <- comput_bias(nbleaves = 2^(5:8), freg.name = "sum",
+   xdim = 2, nbobs = 1280, nbobs_test = 100, nfor = 100, 
+   tree = TRUE, var_estim = TRUE, mc.cores = 3)
+treeConfint <- comput_confint(treeBias, nbBootstrap = 500)
+plot_bias(forestBias, forestConfint, treeBias, treeConfint)
 ```
 
