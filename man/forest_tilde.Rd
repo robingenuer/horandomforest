@@ -41,7 +41,7 @@ A forest list with the \code{nodepred} component filled with the theoretical val
 (Internal) Ideal forest built
 }
 \examples{
-aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+aforest <- horf:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
    nbobs = 100, mtry = 1)
 aforest$nodepred
 }

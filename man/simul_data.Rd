@@ -22,7 +22,7 @@ A list containing the simulated matrix of inputs \code{x} and the simulated one-
 (Internal) Generation of a simulated dataset associated to a given name of the regression function
 }
 \examples{
-simData <- horandomforest:::simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
+simData <- horf:::simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
 plot(simData)
-curve(horandomforest:::freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
+curve(horf:::freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
 }

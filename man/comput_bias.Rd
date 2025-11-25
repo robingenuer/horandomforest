@@ -50,6 +50,6 @@ Forest bias computation
 \examples{
 bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
    xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
-   mc.cores = 2)
+   mc.cores = ifelse(Sys.info()[['sysname']] == "Windows", 1, 2))
 bias_result$for.bias.res
 }

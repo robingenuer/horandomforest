@@ -20,8 +20,8 @@ The index of the node where observation \code{z} falls into.
 (Internal) Descent of an observation in a tree
 }
 \examples{
-aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
    nbobs = 100, mtry = 1)
 z = 0.5
-horandomforest:::descent(z, forest = aforest, ind_tree = 1)
+horf:::descent(z, forest = aforest, ind_tree = 1)
 }

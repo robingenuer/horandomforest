@@ -15,7 +15,7 @@
 #' @examples
 #' bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
 #'    xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
-#'    mc.cores = 2)
+#'    mc.cores = ifelse(Sys.info()[['sysname']] == "Windows", 1, 2))
 #' bias_result$for.bias.res
 comput_bias <- function(
     nbleaves,  freg.name, xdim, nbobs = NULL, nfor = 1, nbobs_test = 500,
@@ -43,7 +43,7 @@ comput_bias <- function(
       squaredErrors <- (s - s.tilde)^2
 
       return(cbind(squaredErrors))
-    }, mc.cores = mc.cores)
+    }, mc.cores = ifelse(Sys.info()[['sysname']] == "Windows", 1, mc.cores))
 
     allSquaredErrors <- do.call("rbind", for.bias[[m]])
     for.bias.res[m, 1] <- colMeans(allSquaredErrors)

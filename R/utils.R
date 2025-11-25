@@ -43,9 +43,9 @@ freg <- function(x, freg.name) {
 #' @importFrom stats runif rnorm
 #'
 #' @examples
-#' simData <- horandomforest:::simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
+#' simData <- horf:::simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
 #' plot(simData)
-#' curve(horandomforest:::freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
+#' curve(horf:::freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
 simul_data <- function(nbobs, xdim, freg.name, sigma = 1/4) {
   x <- matrix(stats::runif(xdim * nbobs), ncol = xdim)
   eps <- stats::rnorm(nbobs, mean = 0, sd = sigma)
@@ -85,7 +85,7 @@ beta_fried1 <- function(h) {
 #' @returns The `forest` component of a `randomForest` class object from the `randomForest` package
 #'
 #' @examples
-#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#' aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
 #'    nbobs = 100, mtry = 1)
 forest_structure <- function(
     k, xdim,  freg.name, ntree, nbobs = NULL, mtry = max(1, floor(xdim/3)),
@@ -120,9 +120,9 @@ forest_structure <- function(
 #' @returns A vector of length 2 containing the bounds of the interval associated to that node of that tree
 #'
 #' @examples
-#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#' aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
 #'    nbobs = 100, mtry = 1)
-#' horandomforest:::interval_node_bounds(aforest, ind_tree = 1, node = 3)
+#' horf:::interval_node_bounds(aforest, ind_tree = 1, node = 3)
 interval_node_bounds <- function(
     forest, ind_tree, node, dim.int = forest$bestvar[node, ind_tree]) {
 
@@ -191,9 +191,9 @@ hyper_rec_base <- function(ind_tree, forest, hrec, xdim) {
 #' @returns An array with same dimensions as `hrec` filled with the coordinates of the hyper-rectangles associated to all sets of the partition of the input space (defined by the `ind_tree`-th tree of the `forest` for `hyper_rec_base()` and for all trees of the `forest` for `hyper_rec()`).
 #'
 #' @examples
-#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#' aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
 #'    nbobs = 100, mtry = 1)
-#' horandomforest:::hyper_rec(forest = aforest, xdim = 1)
+#' horf:::hyper_rec(forest = aforest, xdim = 1)
 hyper_rec <- function(forest, xdim) {
   ntree <- forest$ntree
   nrnodes <- forest$nrnodes
@@ -218,7 +218,7 @@ hyper_rec <- function(forest, xdim) {
 #' @returns A forest list with the `nodepred` component filled with the theoretical values when we know the regression function exactly (hence the name *ideal* forest).
 #'
 #' @examples
-#' aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#' aforest <- horf:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
 #'    nbobs = 100, mtry = 1)
 #' aforest$nodepred
 forest_tilde <- function(
@@ -269,10 +269,10 @@ forest_tilde <- function(
 #' @returns The index of the node where observation `z` falls into.
 #'
 #' @examples
-#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#' aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
 #'    nbobs = 100, mtry = 1)
 #' z = 0.5
-#' horandomforest:::descent(z, forest = aforest, ind_tree = 1)
+#' horf:::descent(z, forest = aforest, ind_tree = 1)
 descent <- function(z, forest, ind_tree) {
     node <- 1
     status <- -1
@@ -296,10 +296,10 @@ descent <- function(z, forest, ind_tree) {
 #' @returns A vector of the predicted values of all rows of the matrix `z` by the `forest`.
 #'
 #' @examples
-#' aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#' aforest <- horf:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
 #'    nbobs = 100, mtry = 1)
 #' zmat <- matrix(c(0.2, 0.7), nrow = 2, ncol = 1)
-#' horandomforest:::f_estim(zmat, aforest)
+#' horf:::f_estim(zmat, aforest)
 f_estim <- function(zmat, forest) {
   n <- length(zmat[, 1])
   estims <- unlist(lapply(

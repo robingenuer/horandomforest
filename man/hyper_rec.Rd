@@ -18,7 +18,7 @@ An array with same dimensions as \code{hrec} filled with the coordinates of the 
 (Internal) Hyper-rectangles coordinates computation of the partitions sets of the trees of a forest
 }
 \examples{
-aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
    nbobs = 100, mtry = 1)
-horandomforest:::hyper_rec(forest = aforest, xdim = 1)
+horf:::hyper_rec(forest = aforest, xdim = 1)
 }

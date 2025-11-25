@@ -18,8 +18,8 @@ A vector of the predicted values of all rows of the matrix \code{z} by the \code
 (Internal) Predicts all observations (rows) of a matrix with a forest
 }
 \examples{
-aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+aforest <- horf:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
    nbobs = 100, mtry = 1)
 zmat <- matrix(c(0.2, 0.7), nrow = 2, ncol = 1)
-horandomforest:::f_estim(zmat, aforest)
+horf:::f_estim(zmat, aforest)
 }

@@ -41,6 +41,6 @@ The \code{forest} component of a \code{randomForest} class object from the \code
 (Internal) Generates a random forest structure build on a simulated dataset using the \code{randomForest::randomForest()} function
 }
 \examples{
-aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
    nbobs = 100, mtry = 1)
 }

@@ -27,7 +27,7 @@ A vector of length 2 containing the bounds of the interval associated to that no
 (Internal) Bounds computation associated to a node of a tree (of a forest)
 }
 \examples{
-aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+aforest <- horf:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
    nbobs = 100, mtry = 1)
-horandomforest:::interval_node_bounds(aforest, ind_tree = 1, node = 3)
+horf:::interval_node_bounds(aforest, ind_tree = 1, node = 3)
 }
