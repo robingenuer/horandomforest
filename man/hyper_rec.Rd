@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{hyper_rec}
 \alias{hyper_rec}
-\title{Hyper-rectangles coordinates computation of the partitions sets of the trees of a forest}
+\title{(Internal) Hyper-rectangles coordinates computation of the partitions sets of the trees of a forest}
 \usage{
 hyper_rec(forest, xdim)
 }
@@ -15,9 +15,10 @@ hyper_rec(forest, xdim)
 An array with same dimensions as \code{hrec} filled with the coordinates of the hyper-rectangles associated to all sets of the partition of the input space (defined by the \code{ind_tree}-th tree of the \code{forest} for \code{hyper_rec_base()} and for all trees of the \code{forest} for \code{hyper_rec()}).
 }
 \description{
-Hyper-rectangles coordinates computation of the partitions sets of the trees of a forest
+(Internal) Hyper-rectangles coordinates computation of the partitions sets of the trees of a forest
 }
 \examples{
-aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
-hyper_rec(forest = aforest, xdim = 1)
+aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+   nbobs = 100, mtry = 1)
+horandomforest:::hyper_rec(forest = aforest, xdim = 1)
 }

@@ -13,11 +13,14 @@
 #' @importFrom parallel mclapply
 #'
 #' @examples
-#' bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus", xdim = 1, nbobs = 640, nbobs_test = 100, nfor = 2, var_estim = TRUE)
+#' bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+#'    xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
+#'    mc.cores = 2)
+#' bias_result$for.bias.res
 comput_bias <- function(
     nbleaves,  freg.name, xdim, nbobs = NULL, nfor = 1, nbobs_test = 500,
     mtry = max(1, floor(xdim/3)), tree = FALSE, var_estim = FALSE,
-    seeds = FALSE, mc.cores = 1) {
+    mc.cores = 1) {
 
   debut <- Sys.time()
   cl <- match.call()
@@ -27,7 +30,6 @@ comput_bias <- function(
   for.bias.res <- matrix(NA, nrow = length(nbleaves), ncol = 2)
   x.test <- matrix(runif(xdim * nbobs_test), ncol = xdim)
   s <- freg(x.test, freg.name)
-  if (seeds) {seeds <- dget("outputs/seeds")}
 
   for (k in nbleaves) {
     debutk <- Sys.time()

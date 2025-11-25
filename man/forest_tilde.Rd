@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{forest_tilde}
 \alias{forest_tilde}
-\title{Ideal forest built}
+\title{(Internal) Ideal forest built}
 \usage{
 forest_tilde(
   k,
@@ -19,7 +19,7 @@ forest_tilde(
 
 \item{xdim}{Dimension of the input space of th regression function}
 
-\item{freg.name}{Name of the regression function to use, among "sum", "fried1", "sinus" and "abs"}
+\item{freg.name}{Name of the regression function to use, among "abs", "fried1", "sinus" and "sum"}
 
 \item{ntree}{Number of trees to grow.  This should not be set to too
     small a number, to ensure that every input row gets predicted at
@@ -38,9 +38,10 @@ forest_tilde(
 A forest list with the \code{nodepred} component filled with the theoretical values when we know the regression function exactly (hence the name \emph{ideal} forest).
 }
 \description{
-Ideal forest built
+(Internal) Ideal forest built
 }
 \examples{
-aforest <- forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+   nbobs = 100, mtry = 1)
 aforest$nodepred
 }

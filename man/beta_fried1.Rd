@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{beta_fried1}
 \alias{beta_fried1}
-\title{(Internal) Computation of the mean value of the regression function in an hyper-rectangle for the \code{Fried1} regression function:}
+\title{(Internal) Computation of the mean value of the regression function in an hyper-rectangle for the \code{Fried1} regression function}
 \usage{
 beta_fried1(h)
 }
@@ -13,5 +13,5 @@ beta_fried1(h)
 A vector of length one giving the mean value of the Fried1 regression function in the hyper-rectangle \code{h}.
 }
 \description{
-(Internal) Computation of the mean value of the regression function in an hyper-rectangle for the \code{Fried1} regression function:
+(Internal) Computation of the mean value of the regression function in an hyper-rectangle for the \code{Fried1} regression function
 }

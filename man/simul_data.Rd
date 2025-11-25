@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{simul_data}
 \alias{simul_data}
-\title{Generation of a simulated dataset associated to a given name of the regression function}
+\title{(Internal) Generation of a simulated dataset associated to a given name of the regression function}
 \usage{
 simul_data(nbobs, xdim, freg.name, sigma = 1/4)
 }
@@ -11,7 +11,7 @@ simul_data(nbobs, xdim, freg.name, sigma = 1/4)
 
 \item{xdim}{Dimension of the input space of th regression function}
 
-\item{freg.name}{Name of the regression function to use, among "sum", "fried1", "sinus" and "abs"}
+\item{freg.name}{Name of the regression function to use, among "abs", "fried1", "sinus" and "sum"}
 
 \item{sigma}{The standard deviation of the centered gaussian noise added to computed output values (default to 1/4)}
 }
@@ -19,9 +19,10 @@ simul_data(nbobs, xdim, freg.name, sigma = 1/4)
 A list containing the simulated matrix of inputs \code{x} and the simulated one-column matrix of outputs \code{y}.
 }
 \description{
-Generation of a simulated dataset associated to a given name of the regression function
+(Internal) Generation of a simulated dataset associated to a given name of the regression function
 }
 \examples{
-simData <- simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
-curve(freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
+simData <- horandomforest:::simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
+plot(simData)
+curve(horandomforest:::freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
 }

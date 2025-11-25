@@ -7,9 +7,13 @@
 #' @returns A list containing the slopes, intercepts and biases confidence intervals.
 #' @export
 #'
+#' @importFrom stats lm
+#'
 #' @examples
-#' bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus", xdim = 1, nbobs = 640, nbobs_test = 100, nfor = 3, var_estim = TRUE)
-#' comput_confint(bias_result, nbBootstrap = 50)
+#' bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+#'    xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
+#'    mc.cores = 2)
+#' comput_confint(bias_result, nbBootstrap = 250)
 comput_confint <- function(
     comput.bias.res, nbBootstrap = 500, alpha = 0.05) {
 
@@ -21,16 +25,15 @@ comput_confint <- function(
                    size = nrow(comput.bias.res$for.bias[[1]][[1]]),
                    replace = TRUE)
     bias <- t(sapply(comput.bias.res$for.bias, function(biask) {
-      subBiask <- lapply(biask[indU], function(subB) { subB[indX, ] })
+      subBiask <- lapply(biask[indU], function(subB) {
+        subB[indX, , drop = FALSE]})
       subSquaredErrorsk <- do.call("rbind", subBiask)
-      return(rowMeans(subSquaredErrorsk))
+      return(colMeans(subSquaredErrorsk))
     }))
     log.bias <- log(bias, base = 2)
     log.nbleaves <- log(comput.bias.res$for.bias.res[, "nbleaves"], base = 2)
-    slopes <- apply(log.bias, MARGIN = 2, FUN = function(y, x = log.nbleaves) {
-      return(lm(y ~ x, data = data.frame(x, y))$coef[2])})
-    intercepts <- apply(log.bias, MARGIN = 2, FUN = function(y, x = log.nbleaves) {
-      return(lm(y ~ x, data = data.frame(x, y))$coef[1])})
+    slopes <- stats::lm(log.bias[1, ] ~ log.nbleaves)$coef[2]
+    intercepts <- stats::lm(log.bias[1, ] ~ log.nbleaves)$coef[1]
     return(list(bchaps = bias, slopes = slopes, intercepts = intercepts))
   })
 
@@ -42,21 +45,13 @@ comput_confint <- function(
     return(bchapsBounds)
   }))
 
-  resampledSlopes <- sapply(resamplings, function(resamp) { resamp$slopes })
-  slopesCI <- t(apply(resampledSlopes, MARGIN = 1, FUN = function(slopes) {
-    sortedSlopes <- sort(slopes)
-    bounds <- sortedSlopes[c(floor(nbBootstrap * alpha / 2),
-                             ceiling(nbBootstrap * (1 - alpha / 2)))]
-    return(bounds)
-  }))
+  resampledSlopes <- sapply(resamplings, function(resamp) resamp$slopes)
+  slopesCI <- sort(resampledSlopes)[c(floor(nbBootstrap * alpha / 2),
+                                      ceiling(nbBootstrap * (1 - alpha / 2)))]
 
-  resampledIntercepts <- sapply(resamplings, function(resamp) { resamp$intercepts })
-  interceptsCI <- t(apply(resampledIntercepts, MARGIN = 1, FUN = function(intercepts) {
-    sortedIntercepts <- sort(intercepts)
-    bounds <- sortedIntercepts[c(floor(nbBootstrap * alpha / 2),
-                                 ceiling(nbBootstrap * (1 - alpha / 2)))]
-    return(bounds)
-  }))
+  resampledIntercepts <- sapply(resamplings, function(resamp) resamp$intercepts)
+  interceptsCI <- sort(resampledIntercepts)[c(floor(nbBootstrap * alpha / 2),
+                                     ceiling(nbBootstrap * (1 - alpha / 2)))]
   return(list(slopesCI = slopesCI, interceptsCI = interceptsCI,
               biasesCI = bchapsCI))
 }

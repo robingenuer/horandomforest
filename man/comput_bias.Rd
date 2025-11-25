@@ -14,14 +14,13 @@ comput_bias(
   mtry = max(1, floor(xdim/3)),
   tree = FALSE,
   var_estim = FALSE,
-  seeds = FALSE,
   mc.cores = 1
 )
 }
 \arguments{
 \item{nbleaves}{A vector of the different number of leaves considered to compute the forest bias at}
 
-\item{freg.name}{Name of the regression function to use, among "sum", "fried1", "sinus" and "abs"}
+\item{freg.name}{Name of the regression function to use, among "abs", "fried1", "sinus" and "sum"}
 
 \item{xdim}{Dimension of the input space of th regression function}
 
@@ -49,5 +48,8 @@ A list containing all bias computations. The first component is a matrix summari
 Forest bias computation
 }
 \examples{
-bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus", xdim = 1, nbobs = 640, nbobs_test = 100, nfor = 2, var_estim = TRUE)
+bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+   xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
+   mc.cores = 2)
+bias_result$for.bias.res
 }

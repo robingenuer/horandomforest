@@ -1,8 +1,4 @@
-library(ggplot2)
-library(scales)
-
-
-#' Title
+#' Plot of the evolution of the bias of forests and trees against the number of leaves of trees, with confidence intervals for each bias estimation and for slopes and intercepts of linear fits to curves
 #'
 #'
 #' @param forest.comput.bias.res Resulting object from `comput_bias()` function for forests (with `tree = FALSE` in the call of the function)
@@ -14,14 +10,22 @@ library(scales)
 #' @export
 #'
 #' @import ggplot2
+#' @import scales
+#' @importFrom viridisLite viridis
 #'
 #' @examples
-#' forest_bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus", xdim = 1, nbobs = 640, nbobs_test = 100, nfor = 2, var_estim = TRUE)
-#' forest_confint_result <- comput_confint(forest_bias_result, nbBootstrap = 50)
-#' tree_bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus", xdim = 1, nbobs = 640, nbobs_test = 100, nfor = 2, tree = TRUE, var_estim = TRUE)
-#' tree_confint_result <- comput_confint(tree_bias_result, nbBootstrap = 50)
-#' plot_bias(forest_bias_result, tree_bias_result)
-plot_bias <- function(forest.comput.bias.res, forest.confint.res, tree.comput.bias.res, tree.confint.res) {
+#' forest_bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+#'    xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
+#'    mc.cores = 2)
+#' forest_confint_result <- comput_confint(forest_bias_result, nbBootstrap = 250)
+#' tree_bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+#'    xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, tree = TRUE,
+#'    var_estim = TRUE, mc.cores = 2)
+#' tree_confint_result <- comput_confint(tree_bias_result, nbBootstrap = 250)
+#' plot_bias(forest_bias_result, forest_confint_result,
+#'     tree_bias_result, tree_confint_result)
+plot_bias <- function(forest.comput.bias.res, forest.confint.res,
+  tree.comput.bias.res, tree.confint.res) {
 
   for.bias <- data.frame(forest.comput.bias.res$for.bias.res)
   for.slopesCI <- forest.confint.res$slopesCI
@@ -67,18 +71,24 @@ plot_bias <- function(forest.comput.bias.res, forest.confint.res, tree.comput.bi
   colnames(for.bias)[3:4] <- c("Binf", "Bsup")
   for.bias$Type <- "forest"
   bias <- rbind(tree.bias, for.bias)
+  .x <- NULL # avoid a NOTE on package check
 
-  pbiasBars <- ggplot(data = bias, aes(x = nbleaves, y = mean, color = Type)) +
-    geom_point() + geom_line() +
-    geom_errorbar(aes(ymin = Binf, ymax = Bsup), width = 0.2) +
-    scale_y_continuous(trans = log2_trans(),
-                       breaks = trans_breaks("log2", function(x) 2^x),
-                       labels = trans_format("log2", math_format(2^.x))) +
-    scale_x_continuous(trans = log2_trans(),
-                       breaks = trans_breaks("log2", function(x) 2^x),
-                       labels = trans_format("log2", math_format(2^.x))) +
-    scale_color_manual(
-      values = viridis::viridis(3)[1:2],
+  pbiasBars <- ggplot2::ggplot(
+    data = bias, ggplot2::aes
+    (x = .data$nbleaves, y = .data$mean, color = .data$Type)) +
+    ggplot2::geom_point() + ggplot2::geom_line() +
+    ggplot2::geom_errorbar(
+      ggplot2::aes(ymin = .data$Binf, ymax = .data$Bsup), width = 0.2) +
+    ggplot2::scale_y_continuous(trans = scales::log2_trans(),
+                       breaks = scales::trans_breaks("log2", function(x) 2^x),
+                       labels = scales::trans_format(
+                         "log2", scales::label_math(2^.x))) +
+    ggplot2::scale_x_continuous(trans = scales::log2_trans(),
+                       breaks = scales::trans_breaks("log2", function(x) 2^x),
+                       labels = scales::trans_format(
+                         "log2", scales::label_math(2^.x))) +
+    ggplot2::scale_color_manual(
+      values = viridisLite::viridis(3)[1:2],
       breaks = c("tree", "forest"),
       labels = c(paste0("tree", "\n",
                         "r=", pentes[1], "(",
@@ -90,9 +100,11 @@ plot_bias <- function(forest.comput.bias.res, forest.confint.res, tree.comput.bi
                         paste(slopesCI[2, ], collapse = ","), ")" , "\n",
                         "i=", intercepts[2], "(",
                         paste(interceptsCI[2, ], collapse = ","), ")"))) +
-    xlab("Number of leaves of trees (log-scale)") + ylab("Bias (log-scale)") +
-    theme_bw() +
-    theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank())
+    ggplot2::xlab("Number of leaves of trees (log-scale)") +
+    ggplot2::ylab("Bias (log-scale)") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(panel.grid.minor = ggplot2::element_blank(),
+                   panel.grid.major = ggplot2::element_blank())
 
   print(pbiasBars)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{forest_structure}
 \alias{forest_structure}
-\title{(Internal) Generated a random forest structure build on a simulated dataset using the \code{randomForest::randomForest()} function}
+\title{(Internal) Generates a random forest structure build on a simulated dataset using the \code{randomForest::randomForest()} function}
 \usage{
 forest_structure(
   k,
@@ -10,7 +10,7 @@ forest_structure(
   freg.name,
   ntree,
   nbobs = NULL,
-  mtry = max(1, floor(d/3)),
+  mtry = max(1, floor(xdim/3)),
   seed = NULL
 )
 }
@@ -19,7 +19,7 @@ forest_structure(
 
 \item{xdim}{Dimension of the input space of th regression function}
 
-\item{freg.name}{Name of the regression function to use, among "sum", "fried1", "sinus" and "abs"}
+\item{freg.name}{Name of the regression function to use, among "abs", "fried1", "sinus" and "sum"}
 
 \item{ntree}{Number of trees to grow.  This should not be set to too
     small a number, to ensure that every input row gets predicted at
@@ -38,8 +38,9 @@ forest_structure(
 The \code{forest} component of a \code{randomForest} class object from the \code{randomForest} package
 }
 \description{
-(Internal) Generated a random forest structure build on a simulated dataset using the \code{randomForest::randomForest()} function
+(Internal) Generates a random forest structure build on a simulated dataset using the \code{randomForest::randomForest()} function
 }
 \examples{
-aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+   nbobs = 100, mtry = 1)
 }

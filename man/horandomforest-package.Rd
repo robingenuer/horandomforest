@@ -4,9 +4,9 @@
 \name{horandomforest-package}
 \alias{horandomforest}
 \alias{horandomforest-package}
-\title{horandomforest: Implementation of Hold-Out Random Forests}
+\title{horandomforest: Implementation of Hold-Out Random Forests and their bias computation}
 \description{
-This package contains necessary functions to reproduce the simulation experiments of the article Arlot and Genuer (2026). In this article the rate of convergence of Hold-Out Random Forests are studied. Thus, the package gives an implementation of this Random Forests variant and a plot function to visualize the convergence rate.
+This package contains necessary functions to reproduce the simulation experiments of the article Arlot and Genuer (XXXX). In this article the rate of convergence of Hold-Out Random Forests bias is studied. Thus, the package gives an implementation of this Random Forests variant and a plot function to visualize the bias convergence rate of trees v.s. forests.
 }
 \seealso{
 Useful links:

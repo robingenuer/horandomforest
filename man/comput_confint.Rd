@@ -20,6 +20,8 @@ A list containing the slopes, intercepts and biases confidence intervals.
 Computation of confidence intervals of biases, and slopes and intercepts estimations by Bootstrap
 }
 \examples{
-bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus", xdim = 1, nbobs = 640, nbobs_test = 100, nfor = 2, var_estim = TRUE)
-comput_confint(bias_result, )
+bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
+   xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
+   mc.cores = 2)
+comput_confint(bias_result, nbBootstrap = 250)
 }

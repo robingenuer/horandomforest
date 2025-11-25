@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{descent}
 \alias{descent}
-\title{Descent of an observation in a tree}
+\title{(Internal) Descent of an observation in a tree}
 \usage{
 descent(z, forest, ind_tree)
 }
@@ -17,10 +17,11 @@ descent(z, forest, ind_tree)
 The index of the node where observation \code{z} falls into.
 }
 \description{
-Descent of an observation in a tree
+(Internal) Descent of an observation in a tree
 }
 \examples{
-aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+   nbobs = 100, mtry = 1)
 z = 0.5
-descent(z, forest = aforest, ind_tree = 1)
+horandomforest:::descent(z, forest = aforest, ind_tree = 1)
 }

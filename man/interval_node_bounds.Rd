@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{interval_node_bounds}
 \alias{interval_node_bounds}
-\title{Bounds computation associated to a node of a tree (of a forest)}
+\title{(Internal) Bounds computation associated to a node of a tree (of a forest)}
 \usage{
 interval_node_bounds(
   forest,
@@ -24,9 +24,10 @@ interval_node_bounds(
 A vector of length 2 containing the bounds of the interval associated to that node of that tree
 }
 \description{
-Bounds computation associated to a node of a tree (of a forest)
+(Internal) Bounds computation associated to a node of a tree (of a forest)
 }
 \examples{
-aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
-interval_node_bounds(aforest, ind_tree = 1, node = 3)
+aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+   nbobs = 100, mtry = 1)
+horandomforest:::interval_node_bounds(aforest, ind_tree = 1, node = 3)
 }

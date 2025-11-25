@@ -1,10 +1,9 @@
-#' Define the regression function used in the simulation by name
+#' (Internal) Defines the regression function used in the simulation by name
 #'
 #' @param x A vector for one-dimensional functions, a matrix for multidimensional ones, containing values for which the regression function has to be computed
-#' @param freg.name Name of the regression function to use, among "sum", "fried1", "sinus" and "abs"
+#' @param freg.name Name of the regression function to use, among "abs", "fried1", "sinus" and "sum"
 #'
 #' @returns A vector of the resulting computed values of the regression function associated to the inputs in `x`.
-#' @export
 freg <- function(x, freg.name) {
   if (freg.name == "sum") {
     y <- rowSums(x)
@@ -32,7 +31,7 @@ freg <- function(x, freg.name) {
 }
 
 
-#' Generation of a simulated dataset associated to a given name of the regression function
+#' (Internal) Generation of a simulated dataset associated to a given name of the regression function
 #'
 #' @param nbobs The number of observations of the simulated dataset
 #' @param xdim Dimension of the input space of th regression function
@@ -40,20 +39,22 @@ freg <- function(x, freg.name) {
 #' @inheritParams freg
 #'
 #' @returns A list containing the simulated matrix of inputs `x` and the simulated one-column matrix of outputs `y`.
-#' @export
+#'
+#' @importFrom stats runif rnorm
 #'
 #' @examples
-#' simData <- simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
-#' curve(freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
+#' simData <- horandomforest:::simul_data(nbobs = 100, xdim = 1, freg.name = "sinus")
+#' plot(simData)
+#' curve(horandomforest:::freg(x, freg.name = "sinus"), from = 0, to = 1, add = TRUE, col = 2)
 simul_data <- function(nbobs, xdim, freg.name, sigma = 1/4) {
-  x <- matrix(runif(xdim * nbobs), ncol = xdim)
-  eps <- rnorm(nbobs, mean = 0, sd = sigma)
+  x <- matrix(stats::runif(xdim * nbobs), ncol = xdim)
+  eps <- stats::rnorm(nbobs, mean = 0, sd = sigma)
   y <- freg(x, freg.name) + eps
   return(list(x = x, y = y))
 }
 
 
-#' (Internal) Computation of the mean value of the regression function in an hyper-rectangle for the `Fried1` regression function:
+#' (Internal) Computation of the mean value of the regression function in an hyper-rectangle for the `Fried1` regression function
 #'
 #' @param h A matrix with two columns (left and right coordinate of each of the hyper-rectangle dimension) and as many rows as the dimension of the number of parameters of the regression function (at least 5 for the `Fried1` function), that contains the coordinates of an hyper-rectangle associated to a leaf of a tree
 #'
@@ -74,7 +75,7 @@ beta_fried1 <- function(h) {
 
 
 
-#' (Internal) Generated a random forest structure build on a simulated dataset using the `randomForest::randomForest()` function
+#' (Internal) Generates a random forest structure build on a simulated dataset using the `randomForest::randomForest()` function
 #'
 #' @param k Number of leaves of the trees (the same for all trees of a forest)
 #' @param seed An optional seed given to the `set.seed()` function
@@ -82,12 +83,12 @@ beta_fried1 <- function(h) {
 #' @inheritParams randomForest::randomForest
 #'
 #' @returns The `forest` component of a `randomForest` class object from the `randomForest` package
-#' @export
 #'
 #' @examples
-#' aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#'    nbobs = 100, mtry = 1)
 forest_structure <- function(
-    k, xdim,  freg.name, ntree, nbobs = NULL, mtry = max(1, floor(d/3)),
+    k, xdim,  freg.name, ntree, nbobs = NULL, mtry = max(1, floor(xdim/3)),
     seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
@@ -109,7 +110,7 @@ forest_structure <- function(
   return(forest)
 }
 
-#' Bounds computation associated to a node of a tree (of a forest)
+#' (Internal) Bounds computation associated to a node of a tree (of a forest)
 #'
 #' @param forest The forest structure resulting from the `forest_structure` function
 #' @param ind_tree Index of the tree to consider
@@ -117,11 +118,11 @@ forest_structure <- function(
 #' @param dim.int A vector of the dimensions of the input space for which the interval bounds are computed (default is only the dimension where the split of that node has been made)
 #'
 #' @returns A vector of length 2 containing the bounds of the interval associated to that node of that tree
-#' @export
 #'
 #' @examples
-#' aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
-#' interval_node_bounds(aforest, ind_tree = 1, node = 3)
+#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#'    nbobs = 100, mtry = 1)
+#' horandomforest:::interval_node_bounds(aforest, ind_tree = 1, node = 3)
 interval_node_bounds <- function(
     forest, ind_tree, node, dim.int = forest$bestvar[node, ind_tree]) {
 
@@ -166,7 +167,7 @@ interval_node_bounds <- function(
   return(bounds)
 }
 
-#' Hyper-rectangles coordinates computation of the partitions sets of one particular tree of a forest
+# (Internal) Hyper-rectangles coordinates computation of the partitions sets of one particular tree of a forest
 hyper_rec_base <- function(ind_tree, forest, hrec, xdim) {
   hrec.base <- hrec[, ind_tree, , , drop = FALSE]
   nrnodes <- forest$nrnodes
@@ -183,16 +184,16 @@ hyper_rec_base <- function(ind_tree, forest, hrec, xdim) {
 }
 
 
-#' Hyper-rectangles coordinates computation of the partitions sets of the trees of a forest
+#' (Internal) Hyper-rectangles coordinates computation of the partitions sets of the trees of a forest
 #' @inheritParams interval_node_bounds
 #' @inheritParams simul_data
 #'
 #' @returns An array with same dimensions as `hrec` filled with the coordinates of the hyper-rectangles associated to all sets of the partition of the input space (defined by the `ind_tree`-th tree of the `forest` for `hyper_rec_base()` and for all trees of the `forest` for `hyper_rec()`).
-#' @export
 #'
 #' @examples
-#' aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
-#' hyper_rec(forest = aforest, xdim = 1)
+#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#'    nbobs = 100, mtry = 1)
+#' horandomforest:::hyper_rec(forest = aforest, xdim = 1)
 hyper_rec <- function(forest, xdim) {
   ntree <- forest$ntree
   nrnodes <- forest$nrnodes
@@ -210,15 +211,15 @@ hyper_rec <- function(forest, xdim) {
 }
 
 
-#' Ideal forest built
+#' (Internal) Ideal forest built
 #'
 #' @inheritParams forest_structure
 #'
 #' @returns A forest list with the `nodepred` component filled with the theoretical values when we know the regression function exactly (hence the name *ideal* forest).
-#' @export
 #'
 #' @examples
-#' aforest <- forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+#' aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#'    nbobs = 100, mtry = 1)
 #' aforest$nodepred
 forest_tilde <- function(
     k, xdim, freg.name, ntree, nbobs = NULL, mtry = max(1, floor(xdim/3)),
@@ -259,19 +260,19 @@ forest_tilde <- function(
 }
 
 
-#' Descent of an observation in a tree
+#' (Internal) Descent of an observation in a tree
 #'
 #' @param z A vector of the coordinates of the observation we want to let go down the tree
 #' @inheritParams interval_node_bounds
 #' @inheritParams simul_data
 #'
 #' @returns The index of the node where observation `z` falls into.
-#' @export
 #'
 #' @examples
-#' aforest <- forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+#' aforest <- horandomforest:::forest_structure(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#'    nbobs = 100, mtry = 1)
 #' z = 0.5
-#' descent(z, forest = aforest, ind_tree = 1)
+#' horandomforest:::descent(z, forest = aforest, ind_tree = 1)
 descent <- function(z, forest, ind_tree) {
     node <- 1
     status <- -1
@@ -287,18 +288,18 @@ descent <- function(z, forest, ind_tree) {
   return(node)
 }
 
-#' Predicts all observations (rows) of a matrix with a forest
+#' (Internal) Predicts all observations (rows) of a matrix with a forest
 #'
 #' @param zmat A matrix with observations to predict in rows
 #' @inheritParams descent
 #'
 #' @returns A vector of the predicted values of all rows of the matrix `z` by the `forest`.
-#' @export
 #'
 #' @examples
-#' aforest <- forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+#' aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+#'    nbobs = 100, mtry = 1)
 #' zmat <- matrix(c(0.2, 0.7), nrow = 2, ncol = 1)
-#' f_estim(zmat, aforest)
+#' horandomforest:::f_estim(zmat, aforest)
 f_estim <- function(zmat, forest) {
   n <- length(zmat[, 1])
   estims <- unlist(lapply(
@@ -306,7 +307,7 @@ f_estim <- function(zmat, forest) {
   return(estims)
 }
 
-#' Predicts one observation (one row) of a matrix with a forest
+# (Internal) Predicts one observation (one row) of a matrix with a forest
 #'
 f_estim_base <- function(ind_obs, zmat, forest) {
   pred.trees <- rep(NA, forest$ntree)

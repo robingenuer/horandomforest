@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{f_estim}
 \alias{f_estim}
-\title{Predicts all observations (rows) of a matrix with a forest}
+\title{(Internal) Predicts all observations (rows) of a matrix with a forest}
 \usage{
 f_estim(zmat, forest)
 }
@@ -15,10 +15,11 @@ f_estim(zmat, forest)
 A vector of the predicted values of all rows of the matrix \code{z} by the \code{forest}.
 }
 \description{
-Predicts all observations (rows) of a matrix with a forest
+(Internal) Predicts all observations (rows) of a matrix with a forest
 }
 \examples{
-aforest <- forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10, nbobs = 100, mtry = 1)
+aforest <- horandomforest:::forest_tilde(k = 5, xdim = 1, freg.name = "sinus", ntree = 10,
+   nbobs = 100, mtry = 1)
 zmat <- matrix(c(0.2, 0.7), nrow = 2, ncol = 1)
-f_estim(zmat, aforest)
+horandomforest:::f_estim(zmat, aforest)
 }
