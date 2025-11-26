@@ -15,7 +15,7 @@
 #' @examples
 #' bias_result <- comput_bias(nbleaves = c(2^5, 2^6), freg.name = "sinus",
 #'    xdim = 1, nbobs = 640, nbobs_test = 60, nfor = 10, var_estim = TRUE,
-#'    mc.cores = ifelse(Sys.info()[['sysname']] == "Windows", 1, 2))
+#'    mc.cores = 2)
 #' bias_result$for.bias.res
 comput_bias <- function(
     nbleaves,  freg.name, xdim, nbobs = NULL, nfor = 1, nbobs_test = 500,
